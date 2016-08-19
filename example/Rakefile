@@ -1,0 +1,6 @@
+require 'resque/tasks'
+require_relative 'my_job'
+
+task :test do
+  Resque.enqueue(MyJob, {})
+end

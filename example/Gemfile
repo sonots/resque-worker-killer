@@ -1,0 +1,7 @@
+source "http://rubygems.org"
+
+gem 'rake'
+gem 'resque'
+gem 'resque-worker-killer', path: '../../'
+gem 'pry'
+gem 'pry-nav'
