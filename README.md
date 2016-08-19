@@ -4,6 +4,8 @@
 
 resque-worker-killer gem provides automatic kill of a forked child of Resque worker based on process memory size (RSS) not to exceed the maximum allowed memory size.
 
+The name was inspired by [unicorn-worker-killer](https://github.com/kzk/unicorn-worker-killer) :-p
+
 ## Installation
 
 Add this line to your application's Gemfile:
