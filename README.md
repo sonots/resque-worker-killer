@@ -61,7 +61,7 @@ Options are:
 
 * `@worker_killer_monitor_interval`: Monotring interval to check RSS size (default: 1.0 sec)
 * `@worker_killer_mem_limit`: RSS usage limit, in killobytes (default: 300MB)
-* `@worker_killer_max_term`: Try kiling child process with SIGTERM in `@worker_killer_max_term` times (default: 10), then SIGKILL if it still does not die. Please note that resque worker must be started `TERM_CHILD=1` environment variable.
+* `@worker_killer_max_term`: Try kiling child process with SIGTERM in `@worker_killer_max_term` times (default: 10), then SIGKILL if it still does not die. 
 * `@worker_killer_verbose`: Verbose log
 * `@worker_killer_logger`: Logger instance (default: Resque.logger)
 
