@@ -13,7 +13,7 @@ module Resque
       end
 
       def worker_killer_max_term
-        @worker_killer_max_term ||= 10
+        @worker_killer_max_term ||= (ENV['TERM_CHILD'] ? 10 : 0)
       end
 
       def worker_killer_verbose

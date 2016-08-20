@@ -51,17 +51,29 @@ class MyJob
 end
 ```
 
-`TERM_CHILD` environment variable must be set on starting resque worker:
+### TERM_CHILD=1
+
+Resque requires to set `TERM_CHILD` environment variable to accept killing a forked child with SIGTERM.
 
 ```
 $ TERM_CHILD=1 bundle exec rake resque:work
 ```
+Thus,
+
+* Without `TERM_CHILD=1`, set `@worker_killter_max_term = 0` to send SIGKILL immediately
+* With `TERM_CHILD=1`, set `@worker_killer_max_term > 0` to try SIGTERM first, then SIGKILL
+
+With `TERM_CHILD=1`, `Resque::TermException` is raised if a forked child is killed by SIGTERM.
+
+## Options
 
 Options are:
 
 * `@worker_killer_monitor_interval`: Monotring interval to check RSS size (default: 1.0 sec)
 * `@worker_killer_mem_limit`: RSS usage limit, in killobytes (default: 300MB)
-* `@worker_killer_max_term`: Try kiling child process with SIGTERM in `@worker_killer_max_term` times (default: 10), then SIGKILL if it still does not die. 
+* `@worker_killer_max_term`: Try kiling child process with SIGTERM in `max_term` times, then SIGKILL if it still does not die. 
+  Please note that setting `TERM_CHILD` environment variable is required to accept killing the child with SIGTERM.
+  The default is, 10 with `TERM_CHILD=1`, 0 without `TERM_CHILD=1`.
 * `@worker_killer_verbose`: Verbose log
 * `@worker_killer_logger`: Logger instance (default: Resque.logger)
 
