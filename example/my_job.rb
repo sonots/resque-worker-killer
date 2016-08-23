@@ -16,7 +16,7 @@ class MyJob
     puts 'started'
     sleep 1
     str = 'a' * 10 * 1024 * 1024
-    sleep 3
+    sleep 5
     puts 'finished'
   rescue Resque::TermException => e # env TERM_CHILD=1
     puts 'terminated'
