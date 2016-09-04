@@ -77,6 +77,37 @@ Options are:
 * `@worker_killer_verbose`: Verbose log
 * `@worker_killer_logger`: Logger instance (default: Resque.logger)
 
+## NOTE
+
+It is known that this gem has somewhat poor compatibility with [resque-jobs-per-fork](https://github.com/samgranieri/resque-jobs-per-fork), which enables to have workers perform more than one job, before terminating 
+
+Think of JOBS_PER_FORK=3, it usually works as follows:
+
+```
+10:00:00.40000 PID-14056 1st JOB: Started
+10:00:00.60000 PID-14056 1st JOB: Finished
+10:00:00.60000 PID-14056 2nd JOB: Started
+10:00:01.30000 PID-14056 2nd JOB: Finished
+10:00:01.30000 PID-14056 3rd JOB: Started
+10:00:01.60000 PID-14056 3rd JOB: Finished
+10:00:01.60000 PID-14057 4th JOB: Started
+10:00:01.70000 PID-14057 4th JOB: Finished
+```
+
+Think of Resque::Worker::Killer with `@worker_killer_monitor_interval = 1.0`, it would work as follows:
+
+```
+10:00:00.40000 PID-14056 1st JOB: Started
+10:00:00.60000 PID-14056 1st JOB: Finished
+10:00:00.60000 PID-14056 2nd JOB: Started
+10:00:01.30000 PID-14056 2nd JOB: Finished <= 2nd Job consumed lots of memory
+10:00:01.30000 PID-14056 3rd JOB: Started
+10:00:01.40000 PID-14056 WorkerKiller: Monitors memory size, and kill
+```
+
+The 2nd job consumed lots of memory, but 3rd job is killed.
+To avoid such situation, just stop using resque-jobs-per-fork with this plugin.
+
 ## Contributing
 
 Bug reports and pull requests are welcome on GitHub at https://github.com/sonots/resque-worker-killer. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](http://contributor-covenant.org) code of conduct.
